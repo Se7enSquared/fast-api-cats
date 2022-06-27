@@ -3,7 +3,7 @@
         "name": "Yoda",
         "age": 4,
         "color": "black",
-        "temprament": "shy",
+        "temperament": "shy",
         "weight_in_lbs": "6.2",
         "description": "Yoda is a shy but sweet black Manx with long-hair and a natural half-tail",
         "image": ".img/yoda.jpg"
@@ -12,7 +12,7 @@
         "name": "Pebbles",
         "age": 4,
         "color": "tabby",
-        "temprament": "active",
+        "temperament": "active",
         "weight_in_lbs": "9.4",
         "description": "Pebbles is a fast, active bobtail kitty with a strong hunting drive",
         "image": ".img/pebbles.jpg"
@@ -21,7 +21,7 @@
         "name": "Coral",
         "age": 2,
         "color": "Grey stripe",
-        "temprament": "hyper",
+        "temperament": "hyper",
         "weight_in_lbs": "9.4",
         "description": "Coral is part bengal and loves to jump for her toys",
         "image": ".img/coral.jpg"
