@@ -52,6 +52,7 @@ def get_cat_by_name(*, name: Optional[str]):
 
 @app.post("/add-cat/{cat_id}")
 def add_cat(cat_id: int, cat: Cat):
+    cat_id = str(cat_id)
     if cat_id in cats:
         return {'Error': 'Cat id already exists'}
 
@@ -61,8 +62,24 @@ def add_cat(cat_id: int, cat: Cat):
 
 @app.put("/edit-cat/{cat_id}")
 def edit_cat(cat_id: int, cat: UpdateCat):
+    cat_id = str(cat_id)
     if cat_id not in cats:
         return {'Error': 'Cat id not found'}
 
-    cats[cat_id].update(cat)
+    # TODO: Fix. I know this must be bad code.
+    if cat.name:
+        cats[cat_id]['name'] = cat.name
+    if cat.age:
+        cats[cat_id]['age'] = cat.age
+    if cat.color:
+        cats[cat_id]['color'] = cat.color
+    if cat.temperament:
+        cats[cat_id]['temperament'] = cat.temperament
+    if cat.weight_in_lbs:
+        cats[cat_id]['weight_in_lbs'] = cat.weight_in_lbs
+    if cat.description:
+        cats[cat_id]['description'] = cat.description
+    if cat.image:
+        cats[cat_id]['image'] = cat.image
+
     return cats[cat_id]
