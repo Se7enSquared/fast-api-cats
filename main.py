@@ -1,5 +1,6 @@
 import json
-from fastapi import FastAPI
+from typing import Optional
+from fastapi import FastAPI, Path
 
 app = FastAPI()
 
@@ -17,3 +18,11 @@ def get_cat(cat_id: int = Path(None, description='The cat\'s id number')):
     cat_id = str(cat_id)
     return cats[cat_id]
 
+
+@app.get('/get-by-name/')
+def get_cat_by_name(*, name: Optional[str]):
+    return next(
+        (cats[cat_id] for cat_id in cats
+            if cats[cat_id]['name'].lower() == name.lower()),
+        {'Data': 'Not found'}
+    )
