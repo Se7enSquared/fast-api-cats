@@ -1,7 +1,7 @@
 import json
 from typing import Optional
 
-from fastapi import FastAPI, Path, Request
+from fastapi import FastAPI, HTTPException, Path, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -35,12 +35,13 @@ class UpdateCat(BaseModel):
 
 def convert_json_to_pydantic(file: str, model: BaseModel) -> dict:
     with open(file, 'r') as f:
-        items =json.loads(f.read())
+        items = json.loads(f.read())
         new_dict = {int(item): model(**items[item]) for item in items}
     return new_dict
 
 
-print(convert_json_to_pydantic('cats.json', Cat))
+cats = convert_json_to_pydantic('cats.json', Cat)
+
 
 @app.get('/index/', response_class=HTMLResponse)
 def index(request: Request):
@@ -48,50 +49,41 @@ def index(request: Request):
     return templates.TemplateResponse("index.html", context)
 
 
-#Todo: Add back the get-all-cats
+@app.get('/get-cats/')
+def get_cats():
+    return cats
 
-@app.get('/get-cat/')
+
+@app.get('/get-cat/{cat_id}')
 def get_cat(cat_id: int = Path(None, description='The cat\'s id number')):
-    cat_id = str(cat_id)
     if cat_id not in cats:
-        return {'Error': 'Cat does not exist'}
-    # because json doesn't allow int objects as keys,
-    # have to convert to string
+        raise HTTPException(status_code=404, detail="Cat id not found")
     return cats[cat_id]
 
 
 @app.get('/get-by-name/')
 def get_cat_by_name(*, name: Optional[str]):
-    return next(
-        (cats[cat_id] for cat_id in cats
-         if cats[cat_id]['name'].lower() == name.lower()),
-        {'Data': 'Not found'}
-    )
+    for cat_id in cats:
+        if cats[cat_id].name.lower() == name.lower():
+            return cats[cat_id]
+    raise HTTPException(status_code=404, detail=f"Cat {name} not found")
 
-# TODO: Convert json to pydantic objects
-# TODO:
-#     if entry_id not in food_log:
-#         raise HTTPException(status_code=404, detail="Food entry not found")
-# TODO: Also do for get-cat-by-name Read this: https://stackoverflow.com/questions/11746894/what-is-the-proper-rest-response-code-for-a-valid-request-but-an-empty-data
-# TODO: get next cat id and assign
-# TODO: Get rid of cat_id being passed in
 @app.post("/add-cat/")
 def add_cat(cat: Cat):
-    # TODO: Generate a new id in here with len(cats)
+    cat_id = len(cats) + 1
     if cat.name in cats:
-        return {'Error': 'Cat id already exists'}
-
-    cats[cat.id] = cat
-    return cats[cat.id]
+        raise HTTPException(status_code=409,
+                            detail="Cat already exists (name must be unique)")
+    cats[cat_id] = cat
+    return cats[cat_id]
 
 
 @app.put("/edit-cat/{cat_id}")
 def edit_cat(cat_id: int, cat: UpdateCat):
     cat_id = str(cat_id)
     if cat_id not in cats:
-        return {'Error': 'Cat id not found'}
+        raise HTTPException(status_code=404, detail="Cat id not found")
 
-    # TODO: Fix. I know this must be bad code.
     if cat.name:
         cats[cat_id]['name'] = cat.name
     if cat.age:
@@ -114,7 +106,7 @@ def edit_cat(cat_id: int, cat: UpdateCat):
 def del_cat(cat_id: int):
     cat_id = str(cat_id)
     if cat_id not in cats:
-        return {'Error': 'Cat does not exist'}
+        raise HTTPException(status_code=404, detail="Cat id not found")
 
     cat_name = cats[cat_id]['name']
     del cats[cat_id]
