@@ -12,6 +12,7 @@ app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+
 class Cat(BaseModel):
     name: str
     age: int
@@ -54,7 +55,7 @@ def get_cat(cat_id: int = Path(None, description='The cat\'s id number')):
 def get_cat_by_name(*, name: Optional[str]):
     return next(
         (cats[cat_id] for cat_id in cats
-            if cats[cat_id].name.lower() == name.lower()),
+         if cats[cat_id]['name'].lower() == name.lower()),
         {'Data': 'Not found'}
     )
 
