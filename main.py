@@ -68,6 +68,7 @@ def get_cat_by_name(*, name: Optional[str]):
             return cats[cat_id]
     raise HTTPException(status_code=404, detail=f"Cat {name} not found")
 
+
 @app.post("/add-cat/")
 def add_cat(cat: Cat):
     cat_id = len(cats) + 1
