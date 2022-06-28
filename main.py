@@ -80,34 +80,32 @@ def add_cat(cat: Cat):
 
 @app.put("/edit-cat/{cat_id}")
 def edit_cat(cat_id: int, cat: UpdateCat):
-    cat_id = str(cat_id)
     if cat_id not in cats:
         raise HTTPException(status_code=404, detail="Cat id not found")
 
     if cat.name:
-        cats[cat_id]['name'] = cat.name
+        cats[cat_id].name = cat.name
     if cat.age:
-        cats[cat_id]['age'] = cat.age
+        cats[cat_id].age = cat.age
     if cat.color:
-        cats[cat_id]['color'] = cat.color
+        cats[cat_id].color = cat.color
     if cat.temperament:
-        cats[cat_id]['temperament'] = cat.temperament
+        cats[cat_id].temperament = cat.temperament
     if cat.weight_in_lbs:
-        cats[cat_id]['weight_in_lbs'] = cat.weight_in_lbs
+        cats[cat_id].weight_in_lbs = cat.weight_in_lbs
     if cat.description:
-        cats[cat_id]['description'] = cat.description
+        cats[cat_id].description = cat.description
     if cat.image:
-        cats[cat_id]['image'] = cat.image
+        cats[cat_id].image = cat.image
 
     return cats[cat_id]
 
 
 @app.delete("/del-cat/{cat_id}")
 def del_cat(cat_id: int):
-    cat_id = str(cat_id)
     if cat_id not in cats:
         raise HTTPException(status_code=404, detail="Cat id not found")
 
-    cat_name = cats[cat_id]['name']
+    cat_name = cats[cat_id].name
     del cats[cat_id]
-    return {'Data': f'{cat_name} deleted :('}
+    raise HTTPException(status_code=200, detail=f'{cat_name} deleted :(')
