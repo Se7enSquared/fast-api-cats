@@ -33,13 +33,14 @@ class UpdateCat(BaseModel):
     image: Optional[str] = None
 
 
-# TODO: Parse to dict so I don't have to cast to string
-# values are pydantic objects
-# BITE 345
-with open('cats.json', 'r') as f:
-    cats = json.loads(f.read())
+def convert_json_to_pydantic(file: str, model: BaseModel) -> dict:
+    with open(file, 'r') as f:
+        items =json.loads(f.read())
+        new_dict = {int(item): model(**items[item]) for item in items}
+    return new_dict
 
-print(cats)
+
+print(convert_json_to_pydantic('cats.json', Cat))
 
 @app.get('/index/', response_class=HTMLResponse)
 def index(request: Request):
