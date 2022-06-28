@@ -1,9 +1,14 @@
 import json
 from typing import Optional
+
 from fastapi import FastAPI, Path
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+
 from pydantic import BaseModel
 
 app = FastAPI()
+templates = Jinja2Templates(directory="templates")
 
 
 class Cat(BaseModel):
@@ -37,6 +42,8 @@ def home():
 
 @app.get('/get-cat/{cat_id}')
 def get_cat(cat_id: int = Path(None, description='The cat\'s id number')):
+    # because json doesn't allow int objects as keys,
+    # have to convert to string
     cat_id = str(cat_id)
     return cats[cat_id]
 
@@ -83,3 +90,14 @@ def edit_cat(cat_id: int, cat: UpdateCat):
         cats[cat_id]['image'] = cat.image
 
     return cats[cat_id]
+
+
+@app.delete("/del-cat/{cat_id}")
+def del_cat(cat_id: int):
+    cat_id = str(cat_id)
+    if cat_id not in cats:
+        return {'Error': 'Cat does not exist'}
+
+    cat_name = cats[cat_id]['name']
+    del cats[cat_id]
+    return {'Data': f'{cat_name} deleted :('}
