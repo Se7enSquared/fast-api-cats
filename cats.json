@@ -6,7 +6,7 @@
         "temperament": "shy",
         "weight_in_lbs": "6.2",
         "description": "Yoda is a shy but sweet black Manx with long-hair and a natural half-tail",
-        "image": ".img/yoda.jpg"
+        "image": "/static/img/yoda.jpg"
     },
     "2": {
         "name": "Pebbles",
@@ -15,7 +15,7 @@
         "temperament": "active",
         "weight_in_lbs": "9.4",
         "description": "Pebbles is a fast, active bobtail kitty with a strong hunting drive",
-        "image": ".img/pebbles.jpg"
+        "image": "/static/img/pebbles.jpg"
     },
     "3": {
         "name": "Coral",
@@ -24,6 +24,6 @@
         "temperament": "hyper",
         "weight_in_lbs": "9.4",
         "description": "Coral is part bengal and loves to jump for her toys",
-        "image": ".img/coral.jpg"
+        "image": "/static/img/coral.jpg"
     }
 }

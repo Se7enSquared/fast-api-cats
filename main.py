@@ -1,15 +1,16 @@
 import json
 from typing import Optional
 
-from fastapi import FastAPI, Path
+from fastapi import FastAPI, Path, Request
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from pydantic import BaseModel
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
-
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 class Cat(BaseModel):
     name: str
@@ -31,13 +32,14 @@ class UpdateCat(BaseModel):
     image: Optional[str] = None
 
 
-with open('cats.json') as f:
-    cats = json.load(f)
+with open('cats.json', 'r') as f:
+    cats = json.loads(f.read())
 
 
-@app.get('/')
-def home():
-    return {'data': 'Welcome to CatAPI'}
+@app.get('/index/', response_class=HTMLResponse)
+def index(request: Request):
+    context = {'request': request, 'cats': cats}
+    return templates.TemplateResponse("index.html", context)
 
 
 @app.get('/get-cat/{cat_id}')
