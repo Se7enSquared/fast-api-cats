@@ -77,6 +77,12 @@ def test_get_cat_by_name():
     assert response.json() == yoda
 
 
+def test_get_cat_by_wrong_name():
+    response = client.get('/get-by-name/?name=jingles')
+    assert response.status_code == 200
+    assert response.json() == {}
+
+
 def test_add_cat():
     response = client.post('/add-cat/', json=new_cat)
     assert response.status_code == 200
