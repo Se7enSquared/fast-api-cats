@@ -101,4 +101,4 @@ def del_cat(cat_id: int):
         raise HTTPException(status_code=404, detail="Cat id not found")
 
     del cats[cat_id]
-    return cats
+    return {"ok": True}
