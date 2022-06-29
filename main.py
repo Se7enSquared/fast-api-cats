@@ -95,11 +95,10 @@ def edit_cat(cat_id: int, cat: UpdateCat):
     return update_cat
 
 
-@app.delete("/del-cat/{cat_id}")
+@app.delete("/del-cat/{cat_id}", status_code=204)
 def del_cat(cat_id: int):
     if cat_id not in cats:
         raise HTTPException(status_code=404, detail="Cat id not found")
 
-    cat_name = cats[cat_id].name
     del cats[cat_id]
-    raise HTTPException(status_code=200, detail=f'{cat_name} deleted :(')
+    return cats

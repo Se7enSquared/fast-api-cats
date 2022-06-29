@@ -87,3 +87,9 @@ def test_add_cat():
     response = client.post('/add-cat/', json=new_cat)
     assert response.status_code == 200
     assert response.json() == new_cat
+
+
+def test_del_cat():
+    response = client.post('/del-cat/1')
+    assert response.status_code == 204
+    assert "1" not in response.json()
