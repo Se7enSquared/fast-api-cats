@@ -33,14 +33,14 @@ class UpdateCat(BaseModel):
     image: Optional[str] = None
 
 
-def convert_json_to_pydantic(file: str, model: BaseModel) -> dict:
+def load_data(file: str, model: BaseModel) -> dict:
     with open(file, 'r') as f:
         items = json.loads(f.read())
         new_dict = {int(item): model(**items[item]) for item in items}
     return new_dict
 
 
-cats = convert_json_to_pydantic('cats.json', Cat)
+cats = load_data('cats.json', Cat)
 
 print(cats)
 
