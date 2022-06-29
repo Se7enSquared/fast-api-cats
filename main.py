@@ -42,7 +42,6 @@ def load_data(file: str, model: BaseModel) -> dict:
 
 cats = load_data('cats.json', Cat)
 
-print(cats)
 
 @app.get('/index/', response_class=HTMLResponse)
 def index(request: Request):
@@ -64,10 +63,11 @@ def get_cat(cat_id: int = Path(None, description='The cat\'s id number')):
 
 @app.get('/get-by-name/')
 def get_cat_by_name(*, name: Optional[str]):
-    for cat_id in cats:
-        if cats[cat_id].name.lower() == name.lower():
-            return cats[cat_id]
-    raise HTTPException(status_code=404, detail=f"Cat {name} not found")
+    return next(
+        (cats[cat_id] for cat_id in cats
+            if cats[cat_id].name.lower() == name.lower()),
+        {}
+    )
 
 
 @app.post("/add-cat/")
