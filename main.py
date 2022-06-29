@@ -102,3 +102,4 @@ def del_cat(cat_id: int):
 
     del cats[cat_id]
     return {"ok": True}
+
