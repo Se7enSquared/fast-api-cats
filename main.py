@@ -80,27 +80,19 @@ def add_cat(cat: Cat):
     return cats[cat_id]
 
 
-@app.put("/edit-cat/{cat_id}")
+@app.patch("/edit-cat/{cat_id}")
 def edit_cat(cat_id: int, cat: UpdateCat):
     if cat_id not in cats:
         raise HTTPException(status_code=404, detail="Cat id not found")
 
-    if cat.name:
-        cats[cat_id].name = cat.name
-    if cat.age:
-        cats[cat_id].age = cat.age
-    if cat.color:
-        cats[cat_id].color = cat.color
-    if cat.temperament:
-        cats[cat_id].temperament = cat.temperament
-    if cat.weight_in_lbs:
-        cats[cat_id].weight_in_lbs = cat.weight_in_lbs
-    if cat.description:
-        cats[cat_id].description = cat.description
-    if cat.image:
-        cats[cat_id].image = cat.image
+    update_cat = cats[cat_id]
+    update_fields = {
+        key: value for key, value in cat.dict().items() if value is not None
+    }
+    for key, value in update_fields.items():
+        setattr(update_cat, key, value)
 
-    return cats[cat_id]
+    return update_cat
 
 
 @app.delete("/del-cat/{cat_id}")
