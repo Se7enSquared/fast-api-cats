@@ -42,6 +42,7 @@ def convert_json_to_pydantic(file: str, model: BaseModel) -> dict:
 
 cats = convert_json_to_pydantic('cats.json', Cat)
 
+print(cats)
 
 @app.get('/index/', response_class=HTMLResponse)
 def index(request: Request):
