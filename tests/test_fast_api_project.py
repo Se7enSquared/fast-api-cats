@@ -66,7 +66,7 @@ def test_get_cat():
     assert response.status_code == 200
 
 
-def test_get_wrong_cat():
+def test_get_wrong_cat_id():
     response = client.get('/get-cat/100')
     assert response.status_code == 404
 
