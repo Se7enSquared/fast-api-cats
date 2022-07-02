@@ -40,7 +40,7 @@ def load_data(file: str, model: BaseModel) -> dict:
     return new_dict
 
 
-cats = load_data('cats.json', Cat)
+cats = load_data('fast_api_project/cats.json', Cat)
 
 
 @app.get('/index/', response_class=HTMLResponse)
@@ -102,4 +102,3 @@ def del_cat(cat_id: int):
 
     del cats[cat_id]
     return {"ok": True}
-
