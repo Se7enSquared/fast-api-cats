@@ -46,7 +46,6 @@ def load_data(file: str, model: BaseModel) -> dict:
 
 cats = load_data('fast_api_project/cats.json', Cat)
 
-
 @app.get('/index/', response_class=HTMLResponse)
 def index(request: Request):
     """ returns jinja template with cat data to index route """
@@ -78,7 +77,7 @@ def get_cat_by_name(*, name: Optional[str]):
     )
 
 
-@app.post("/add-cat/")
+@app.post("/add-cat/", status_code=200)
 def add_cat(cat: Cat):
     """ add a cat to the dict """
     cat_id = len(cats) + 1
@@ -89,7 +88,7 @@ def add_cat(cat: Cat):
     return cats[cat_id]
 
 
-@app.patch("/edit-cat/{cat_id}")
+@app.patch("/edit-cat/{cat_id}", status_code=200)
 def edit_cat(cat_id: int, cat: UpdateCat):
     """ edit data for the given cat id
         accepts partial data """

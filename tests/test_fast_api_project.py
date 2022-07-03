@@ -1,5 +1,5 @@
 from fastapi.testclient import TestClient
-from fast_api_project.main import app
+from fast_api_project.main import app, UpdateCat
 
 client = TestClient(app)
 
@@ -22,6 +22,20 @@ new_cat = {
     "weight_in_lbs": 5.2,
     "description": "Tiger only likes salmon flavored foods",
     "image": None
+}
+
+edit_cat = {
+    "description": "Edited description"
+}
+
+cat_edited = {
+    "name": "Yoda",
+    "age": 4,
+    "color": "black",
+    "temperament": "shy",
+    "weight_in_lbs": 6.2,
+    "description": "Edited description",
+    "image": "/static/img/yoda.jpg"
 }
 
 cats = {
@@ -90,6 +104,14 @@ def test_add_cat():
 
 
 def test_del_cat():
+    response = client.get('/get-cats/')
+    assert "1" in response.json()
     response = client.delete('/del-cat/1')
     assert response.status_code == 204
     assert "1" not in response.json()
+
+
+def test_edit_cat():
+    response = client.patch('/edit-cat/1', json=edit_cat)
+    assert response.status_code == 200
+    assert response.json() == cat_edited
