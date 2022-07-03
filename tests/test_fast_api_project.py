@@ -103,15 +103,15 @@ def test_add_cat():
     assert response.json() == new_cat
 
 
+def test_edit_cat():
+    response = client.patch('/edit-cat/1', json=edit_cat)
+    assert response.status_code == 200
+    assert response.json() == cat_edited
+
+
 def test_del_cat():
     response = client.get('/get-cats/')
     assert "1" in response.json()
     response = client.delete('/del-cat/1')
     assert response.status_code == 204
     assert "1" not in response.json()
-
-
-def test_edit_cat():
-    response = client.patch('/edit-cat/1', json=edit_cat)
-    assert response.status_code == 200
-    assert response.json() == cat_edited
