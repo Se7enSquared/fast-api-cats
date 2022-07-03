@@ -46,6 +46,7 @@ def load_data(file: str, model: BaseModel) -> dict:
 
 cats = load_data('fast_api_project/cats.json', Cat)
 
+
 @app.get('/index/', response_class=HTMLResponse)
 def index(request: Request):
     """ returns jinja template with cat data to index route """
